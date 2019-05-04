@@ -12,8 +12,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Map;
-
 @Slf4j
 @SpringBootApplication
 public class BiddersApplication implements CommandLineRunner {
@@ -57,6 +55,26 @@ public class BiddersApplication implements CommandLineRunner {
                         .build()
         );
         options.addOption(
+                Option.builder("qty")
+                        .longOpt("quantity")
+                        .desc("Quantity of product items to be auctioned")
+                        .hasArg()
+                        .argName("QUANTITY UNITS (QU)")
+                        .required(true)
+                        .type(Integer.class)
+                        .build()
+        );
+        options.addOption(
+                Option.builder("c")
+                        .longOpt("cash")
+                        .desc("Initial amount of money")
+                        .hasArg()
+                        .argName("MONETARY UNITS (MU)")
+                        .required(true)
+                        .type(Integer.class)
+                        .build()
+        );
+        options.addOption(
                 Option.builder("v")
                         .longOpt("verbose")
                         .desc("Turn on verbose messages")
@@ -71,7 +89,6 @@ public class BiddersApplication implements CommandLineRunner {
                         .build()
         );
         parseParameters(args);
-        // printHelp();
     }
 
     private void parseParameters(String... args) {
@@ -84,6 +101,8 @@ public class BiddersApplication implements CommandLineRunner {
 
             log.info("bidder 1 : {}", line.getOptionValue("b1"));
             log.info("bidder 2 : {}", line.getOptionValue("b2"));
+            log.info("qty      : {}", line.getOptionValue("qty"));
+            log.info("cash     : {}", line.getOptionValue("c"));
             log.info("verbose  : {}", line.hasOption("v"));
         }
         catch (ParseException e) {
