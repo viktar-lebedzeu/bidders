@@ -1,8 +1,8 @@
 package com.optimax.bidders.builder;
 
 import com.optimax.bidders.auction.Bidder;
-import com.optimax.bidders.auction.EqualBidder;
-import com.optimax.bidders.auction.WeightedBidder;
+import com.optimax.bidders.auction.impl.EqualBidder;
+import com.optimax.bidders.auction.impl.WeightedBidder;
 import lombok.extern.slf4j.Slf4j;
 
 /**

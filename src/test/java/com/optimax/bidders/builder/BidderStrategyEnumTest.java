@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
+ * Test suite to test features of BidderStrategyEnum class
  * @author Viktar Lebedzeu
  */
 @Slf4j
