@@ -5,9 +5,11 @@ import com.optimax.bidders.builder.BidderBuilder;
 import com.optimax.bidders.builder.BidderStrategyEnum;
 import com.optimax.bidders.dto.BidInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.OptionalInt;
 
 /**
  * Auctionist or auction moderator class.
@@ -81,6 +83,72 @@ public class AuctionModerator {
         return (quantity > 0);
     }
 
+    public void printResult() {
+        final Bidder bidder1 = bidders.get(0);
+        final Bidder bidder2 = bidders.get(1);
+        BidderStrategyEnum bidder1Type =
+                (bidder1 instanceof BaseVerboseBidder)
+                        ? ((BaseVerboseBidder) bidder1).getStrategyEnum()
+                        : BidderStrategyEnum.UNKNOWN;
+        BidderStrategyEnum bidder2Type =
+                (bidder2 instanceof BaseVerboseBidder)
+                        ? ((BaseVerboseBidder) bidder2).getStrategyEnum()
+                        : BidderStrategyEnum.UNKNOWN;
+        log.info(StringUtils.repeat("=", 120));
+        log.info(StringUtils.center("Auction results", 120));
+        log.info(StringUtils.repeat("=", 120));
+        log.info(StringUtils.repeat(".", 120));
+        log.info("Quantity : {}", initialQuantity);
+        log.info("Cash     : {}", initialCash);
+        log.info("Bidder 1 : ({})", bidder1Type.getType());
+        log.info("Bidder 2 : ({})", bidder2Type.getType());
+        log.info(StringUtils.repeat(".", 120));
+
+        int step = 1;
+        int stepLength = (StringUtils.EMPTY + bidInfos.size()).length();
+
+        final OptionalInt maxBid1 = bidInfos.parallelStream().mapToInt(BidInfo::getBidValue1).max();
+        final OptionalInt maxBid2 = bidInfos.parallelStream().mapToInt(BidInfo::getBidValue2).max();
+        final OptionalInt maxWinPoints1 = bidInfos.parallelStream().mapToInt(BidInfo::getWinPoints1).max();
+        final OptionalInt maxWinPoints2 = bidInfos.parallelStream().mapToInt(BidInfo::getWinPoints2).max();
+
+        final String bidHeader1 = "Bid 1";
+        final String bidHeader2 = "Bid 2";
+        final String winPointsHeader1 = "Win 1";
+        final String winPointsHeader2 = "Win 2";
+
+        final int bid1FieldLength = (bidHeader1.length() > maxBid1.toString().length())
+                ? bidHeader1.length() : maxBid1.toString().length();
+        final int bid2FieldLength = (bidHeader2.length() > maxBid2.toString().length())
+                ? bidHeader2.length() : maxBid2.toString().length();
+        final int winPoints1FieldLength = (winPointsHeader1.length() > maxWinPoints1.toString().length())
+                ? winPointsHeader1.length() : maxWinPoints1.toString().length();
+        final int winPoints2FieldLength = (winPointsHeader2.length() > maxWinPoints2.toString().length())
+                ? winPointsHeader2.length() : maxWinPoints2.toString().length();
+        log.info("{} : {} : {} : {} : {} :",
+                StringUtils.repeat(" ", stepLength),
+                StringUtils.center(bidHeader1, bid1FieldLength),
+                StringUtils.center(bidHeader2, bid2FieldLength),
+                StringUtils.center(winPointsHeader1, winPoints1FieldLength),
+                StringUtils.center(winPointsHeader2, winPoints2FieldLength)
+        );
+
+        log.info(StringUtils.repeat(".", 120));
+
+        for (BidInfo info : bidInfos) {
+            String stepString = StringUtils.leftPad(StringUtils.EMPTY + step, stepLength);
+            log.info("{} : {} : {} : {} : {} :",
+                    stepString,
+                    StringUtils.rightPad(StringUtils.EMPTY + info.getBidValue1(), bid1FieldLength),
+                    StringUtils.rightPad(StringUtils.EMPTY + info.getBidValue2(), bid2FieldLength),
+                    StringUtils.rightPad(StringUtils.EMPTY + info.getWinPoints1(), winPoints1FieldLength),
+                    StringUtils.rightPad(StringUtils.EMPTY + info.getWinPoints2(), winPoints2FieldLength)
+            );
+            step++;
+        }
+        log.info(StringUtils.repeat("=", 120));
+    }
+
     /**
      * Creates new bid info bean
      * @param bid1 Value of the first bid
@@ -90,15 +158,25 @@ public class AuctionModerator {
     private BidInfo createBidInfo(int bid1, int bid2) {
         int winPoints1 = 0;
         int winPoints2 = 0;
-        if (bid1 < bid2) {
-            winPoints2 = 2;
-        }
-        else if (bid2 < bid1) {
-            winPoints1 = 2;
+        if (quantity > 1) {
+            if (bid1 < bid2) {
+                winPoints2 = 2;
+            }
+            else if (bid2 < bid1) {
+                winPoints1 = 2;
+            }
+            else {
+                winPoints1 = 1;
+                winPoints2 = 1;
+            }
         }
         else {
-            winPoints1 = 1;
-            winPoints2 = 1;
+            if (bid1 > bid2) {
+                winPoints1 = 1;
+            }
+            else if (bid1 < bid2) {
+                winPoints2 = 1;
+            }
         }
         return new BidInfo(bid1, bid2, winPoints1, winPoints2);
     }

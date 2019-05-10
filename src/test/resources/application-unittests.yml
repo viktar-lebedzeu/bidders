@@ -1,0 +1,8 @@
+logging:
+  level:
+    - org.springframework.test=INFO
+    - org.springframework=INFO
+# logging.level.com.horeca=DEBUG
+
+application-test:
+  name: "application test"

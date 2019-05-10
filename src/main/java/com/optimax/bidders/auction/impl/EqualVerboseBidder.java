@@ -1,5 +1,6 @@
 package com.optimax.bidders.auction.impl;
 
+import com.optimax.bidders.builder.BidderStrategyEnum;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -7,6 +8,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class EqualVerboseBidder extends BaseVerboseBidder {
+    @Override
+    public BidderStrategyEnum getStrategyEnum() {
+        return BidderStrategyEnum.EQUAL;
+    }
+
     @Override
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;

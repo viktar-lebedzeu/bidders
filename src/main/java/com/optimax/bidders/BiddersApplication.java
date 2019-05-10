@@ -18,7 +18,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @Slf4j
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.optimax.bidders")
 public class BiddersApplication implements CommandLineRunner {
 
     // Command line parameters
@@ -106,6 +106,7 @@ public class BiddersApplication implements CommandLineRunner {
     private void runAuction() {
         if (moderator != null) {
             while (moderator.nextTurn());
+            moderator.printResult();
         }
     }
 
