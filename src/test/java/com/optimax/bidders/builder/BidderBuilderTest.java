@@ -1,7 +1,7 @@
 package com.optimax.bidders.builder;
 
 import com.optimax.bidders.auction.Bidder;
-import com.optimax.bidders.auction.impl.EqualBidder;
+import com.optimax.bidders.auction.impl.EqualVerboseBidder;
 import com.optimax.bidders.auction.impl.WeightedBidder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
@@ -22,6 +22,6 @@ public class BidderBuilderTest {
 
         bidder = BidderBuilder.createBidderByType("EqUaL");
         Assert.assertNotNull(bidder);
-        Assert.assertTrue(bidder instanceof EqualBidder);
+        Assert.assertTrue(bidder instanceof EqualVerboseBidder);
     }
 }

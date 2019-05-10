@@ -1,16 +1,12 @@
 package com.optimax.bidders.auction.impl;
 
-import com.optimax.bidders.auction.VerboseBidder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Viktar Lebedzeu
  */
-public class WeightedBidder implements VerboseBidder {
-    private int quantity = 0;
-    private int cash = 0;
-    private int quantityPoints = 0;
-    private boolean verbose;
-
+@Slf4j
+public class WeightedBidder extends BaseVerboseBidder {
     @Override
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
@@ -18,8 +14,7 @@ public class WeightedBidder implements VerboseBidder {
 
     @Override
     public void init(int quantity, int cash) {
-        this.quantity = quantity;
-        this.cash = cash;
+        super.init(quantity, cash);
     }
 
     @Override
@@ -29,5 +24,9 @@ public class WeightedBidder implements VerboseBidder {
 
     @Override
     public void bids(int own, int other) {
+        super.bids(own, other);
+        if (verbose) {
+            log.info("bids : {} : {}", own, other);
+        }
     }
 }

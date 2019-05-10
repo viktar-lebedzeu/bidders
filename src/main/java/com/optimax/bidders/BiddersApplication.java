@@ -104,7 +104,9 @@ public class BiddersApplication implements CommandLineRunner {
     }
 
     private void runAuction() {
-        while (moderator.nextTurn());
+        if (moderator != null) {
+            while (moderator.nextTurn());
+        }
     }
 
     private void parseParameters(String... args) {

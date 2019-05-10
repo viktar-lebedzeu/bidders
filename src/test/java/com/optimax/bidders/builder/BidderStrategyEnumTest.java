@@ -22,4 +22,10 @@ public class BidderStrategyEnumTest {
         Assert.assertEquals(BidderStrategyEnum.UNKNOWN, BidderStrategyEnum.findByType(StringUtils.EMPTY));
         Assert.assertEquals(BidderStrategyEnum.UNKNOWN, BidderStrategyEnum.findByType(null));
     }
+
+    @Test
+    public void testPossibleValues() {
+        final String possibleValues = BidderStrategyEnum.possibleValues();
+        Assert.assertEquals("[equal, weighted]", possibleValues);
+    }
 }

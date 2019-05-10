@@ -36,6 +36,14 @@ public class AuctionModerator {
     protected AuctionModerator() {
     }
 
+    private void init() {
+        bidders.parallelStream().forEach(b -> b.init(initialQuantity, initialCash));
+    }
+
+    /**
+     * Sets verbose logging flag for the auction moderator and all related bedders
+     * @param verbose Verbose logging flag
+     */
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
         bidders.parallelStream().forEach(b -> {
@@ -45,6 +53,10 @@ public class AuctionModerator {
         });
     }
 
+    /**
+     * Runs the next auction turn
+     * @return True if moderator could continue the auction, false otherwise
+     */
     public boolean nextTurn() {
         if (quantity <= 0) {
             return false;
@@ -60,9 +72,32 @@ public class AuctionModerator {
         }
         bidder1.bids(bid1, bid2);
         bidder2.bids(bid2, bid1);
+        bidInfos.add(createBidInfo(bid1, bid2));
 
         quantity -= lotValue;
         return (quantity > 0);
+    }
+
+    /**
+     * Creates new bid info bean
+     * @param bid1 Value of the first bid
+     * @param bid2 Value of the second bid
+     * @return Created bid info object
+     */
+    private BidInfo createBidInfo(int bid1, int bid2) {
+        int winPoints1 = 0;
+        int winPoints2 = 0;
+        if (bid1 < bid2) {
+            winPoints2 = 2;
+        }
+        else if (bid2 < bid1) {
+            winPoints1 = 2;
+        }
+        else {
+            winPoints1 = 1;
+            winPoints2 = 1;
+        }
+        return new BidInfo(bid1, bid2, winPoints1, winPoints2);
     }
 
     /**
@@ -90,6 +125,7 @@ public class AuctionModerator {
         moderator.quantity = initialQuantity;
         int bidsCount = (int) Math.ceil((double) initialQuantity / (double) LOT_STEP);
         moderator.bidInfos = new ArrayList<>(bidsCount);
+        moderator.init();
         return moderator;
     }
 

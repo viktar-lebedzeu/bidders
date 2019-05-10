@@ -1,7 +1,7 @@
 package com.optimax.bidders.builder;
 
 import com.optimax.bidders.auction.Bidder;
-import com.optimax.bidders.auction.impl.EqualBidder;
+import com.optimax.bidders.auction.impl.EqualVerboseBidder;
 import com.optimax.bidders.auction.impl.WeightedBidder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,7 @@ public class BidderBuilder {
                 return new WeightedBidder();
 
             case EQUAL:
-                return new EqualBidder();
+                return new EqualVerboseBidder();
 
             default:
                 throw new IllegalArgumentException("Unknown bidder strategy type \"" + type + '\"');

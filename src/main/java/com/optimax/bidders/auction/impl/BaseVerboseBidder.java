@@ -6,12 +6,20 @@ import com.optimax.bidders.auction.VerboseBidder;
  * @author Viktar Lebedzeu
  */
 public abstract class BaseVerboseBidder implements VerboseBidder {
+    /** Initial value of product units (QU) */
     protected int initialQuantity = 0;
+    /** Initial value of cash (MU) */
     protected int initialCash = 0;
+    /** The rest of auctioned units (QU) */
     protected int quantity = 0;
+    /** The rest of cash */
     protected int cash = 0;
+    /** Qty points that won bidder */
     protected int quantityPoints = 0;
+    /** Verbose logging flag */
     protected boolean verbose;
+    /** Goal quantity points */
+    private int goalQuantity = 0;
 
     @Override
     public void setVerbose(boolean verbose) {
@@ -26,8 +34,12 @@ public abstract class BaseVerboseBidder implements VerboseBidder {
 
         this.initialCash = cash;
         this.cash = cash;
-
         this.quantityPoints = 0;
+
+        int goalQuantity = quantity / 2;
+        if (goalQuantity % 2 != 0) {
+            goalQuantity++;
+        }
     }
 
     @Override
