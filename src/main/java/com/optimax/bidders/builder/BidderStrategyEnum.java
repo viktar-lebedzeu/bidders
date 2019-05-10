@@ -2,12 +2,15 @@ package com.optimax.bidders.builder;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * Bidder strategy enumeration
  * @author Viktar Lebedzeu
  */
 public enum BidderStrategyEnum {
-    /** "weighted" stategy */
+    /** "weighted" strategy */
     WEIGHTED("weighted"),
     /** "equal" value strategy */
     EQUAL("equal"),
@@ -45,5 +48,14 @@ public enum BidderStrategyEnum {
             }
         }
         return UNKNOWN;
+    }
+
+    public static String possibleValues() {
+        return Arrays.stream(BidderStrategyEnum.values())
+                        .filter(v -> v != UNKNOWN)
+                        .map(BidderStrategyEnum::getType)
+                        .sorted()
+                        .collect(Collectors.toList())
+                .toString();
     }
 }

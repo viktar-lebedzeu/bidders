@@ -1,5 +1,6 @@
 package com.optimax.bidders;
 
+import com.optimax.bidders.builder.BidderStrategyEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -8,6 +9,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -36,10 +38,11 @@ public class BiddersApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        final String bidderPossibleValues = BidderStrategyEnum.possibleValues();
         options.addOption(
                 Option.builder("b1")
                         .longOpt("bidder1")
-                        .desc("Type of the first bidder")
+                        .desc("Type of the first bidder " + bidderPossibleValues)
                         .hasArg()
                         .argName("BIDDER 1")
                         .required(true)
@@ -48,7 +51,7 @@ public class BiddersApplication implements CommandLineRunner {
         options.addOption(
                 Option.builder("b2")
                         .longOpt("bidder2")
-                        .desc("Type of the second bidder")
+                        .desc("Type of the second bidder " + bidderPossibleValues)
                         .hasArg()
                         .argName("BIDDER 2")
                         .required(true)
@@ -114,6 +117,8 @@ public class BiddersApplication implements CommandLineRunner {
 
     private void printHelp() {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("bidder", options);
+        final String separator = StringUtils.repeat("=", 100);
+        final String header = separator + "\n" + "Bidders application options\n" + separator + "\n";
+        formatter.printHelp(150, "java -jar bidder.jar", header, options, separator, true);
     }
 }
