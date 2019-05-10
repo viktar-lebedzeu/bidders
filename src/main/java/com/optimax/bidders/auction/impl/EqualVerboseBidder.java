@@ -1,13 +1,12 @@
 package com.optimax.bidders.auction.impl;
 
-import com.optimax.bidders.auction.VerboseBidder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Viktar Lebedzeu
  */
+@Slf4j
 public class EqualVerboseBidder extends BaseVerboseBidder {
-    private int quantityPoints = 0;
-
     @Override
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
@@ -20,10 +19,22 @@ public class EqualVerboseBidder extends BaseVerboseBidder {
 
     @Override
     public int placeBid() {
-        return 0;
+        int value = (int) Math.ceil((double) cash / (double) quantity);
+        if (value > cash) {
+            value = cash;
+        }
+        if (verbose) {
+            log.info("Placed bid: {} / {} ({}) = {}", value, cash, initialCash, cash - value);
+        }
+        cash -= value;
+        return value;
     }
 
     @Override
     public void bids(int own, int other) {
+        if (verbose) {
+            log.info("bids : {} : {} ({})", own, other, quantity);
+        }
+        super.bids(own, other);
     }
 }

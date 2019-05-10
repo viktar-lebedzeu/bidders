@@ -7,6 +7,7 @@ import com.optimax.bidders.dto.BidInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Auctionist or auction moderator class.
@@ -20,6 +21,7 @@ public class AuctionModerator {
     /** List of bidders */
     private ArrayList<Bidder> bidders = new ArrayList<>(2);
 
+    /** List of bid info */
     private ArrayList<BidInfo> bidInfos;
 
     /** Initial quantity of product */
@@ -28,6 +30,7 @@ public class AuctionModerator {
     /** Initial value of bidder's cash */
     private int initialCash;
 
+    /** The rest of QU */
     private int quantity = 0;
 
     /** Verbose flag */

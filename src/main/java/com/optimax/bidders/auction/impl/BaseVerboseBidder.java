@@ -1,10 +1,12 @@
 package com.optimax.bidders.auction.impl;
 
 import com.optimax.bidders.auction.VerboseBidder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Viktar Lebedzeu
  */
+@Slf4j
 public abstract class BaseVerboseBidder implements VerboseBidder {
     /** Initial value of product units (QU) */
     protected int initialQuantity = 0;
@@ -19,7 +21,7 @@ public abstract class BaseVerboseBidder implements VerboseBidder {
     /** Verbose logging flag */
     protected boolean verbose;
     /** Goal quantity points */
-    private int goalQuantity = 0;
+    protected int goalQuantity = 0;
 
     @Override
     public void setVerbose(boolean verbose) {
@@ -36,8 +38,8 @@ public abstract class BaseVerboseBidder implements VerboseBidder {
         this.cash = cash;
         this.quantityPoints = 0;
 
-        int goalQuantity = quantity / 2;
-        if (goalQuantity % 2 != 0) {
+        goalQuantity = quantity / 2;
+        if (goalQuantity % 2 == 0) {
             goalQuantity++;
         }
     }
@@ -47,13 +49,20 @@ public abstract class BaseVerboseBidder implements VerboseBidder {
 
     @Override
     public void bids(int own, int other) {
+        int points = 0;
+        int qPoints = (quantity > 1) ? 2 : 1;
         if (own > other) {
             // +2 QU if our bid is bigger than other's one. See the rules of auction for details.
-            quantityPoints += 2;
+            points = qPoints;
         }
-        else if (own == other) {
+        else if (own == other && quantity > 1) {
             // +1 QU if both bids are equal
-            quantityPoints++;
+            points = 1;
+        }
+        quantityPoints += points;
+        quantity -= qPoints;
+        if (verbose) {
+            log.info("QU : {}", quantityPoints);
         }
     }
 }
