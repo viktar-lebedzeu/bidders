@@ -1,5 +1,8 @@
 package com.optimax.bidders;
 
+import com.optimax.bidders.auction.AuctionModerator;
+import com.optimax.bidders.auction.Bidder;
+import com.optimax.bidders.builder.BidderBuilder;
 import com.optimax.bidders.builder.BidderStrategyEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
@@ -31,6 +34,11 @@ public class BiddersApplication implements CommandLineRunner {
 
     /** CLI options */
     private Options options = new Options();
+
+    /** Auction moderator */
+    private AuctionModerator moderator;
+    /** Verbose mode flag */
+    private boolean verbose = false;
 
     public static void main(String[] args) {
         SpringApplication.run(BiddersApplication.class, args);
@@ -92,21 +100,33 @@ public class BiddersApplication implements CommandLineRunner {
                         .build()
         );
         parseParameters(args);
+        runAuction();
+    }
+
+    private void runAuction() {
+        while (moderator.nextTurn());
     }
 
     private void parseParameters(String... args) {
         CommandLineParser parser = new DefaultParser();
         try {
-            CommandLine line = parser.parse(options, args);
+            final CommandLine line = parser.parse(options, args);
             if (line.hasOption("h")) {
                 printHelp();
             }
 
-            log.info("bidder 1 : {}", line.getOptionValue("b1"));
+            final String bidderType1 = line.getOptionValue("b1");
+            final String bidderType2 = line.getOptionValue("b2");
+
+            log.info("bidder 1 : {}", bidderType1);
             log.info("bidder 2 : {}", line.getOptionValue("b2"));
             log.info("qty      : {}", line.getOptionValue("qty"));
             log.info("cash     : {}", line.getOptionValue("c"));
             log.info("verbose  : {}", line.hasOption("v"));
+
+            moderator = AuctionModerator.create(bidderType1, bidderType2,
+                    Integer.valueOf(line.getOptionValue("qty")), Integer.valueOf(line.getOptionValue("c")));
+            moderator.setVerbose(line.hasOption("v"));
         }
         catch (ParseException e) {
             // log.error("Cannot parse command line parameters. ", e);
@@ -120,5 +140,9 @@ public class BiddersApplication implements CommandLineRunner {
         final String separator = StringUtils.repeat("=", 100);
         final String header = separator + "\n" + "Bidders application options\n" + separator + "\n";
         formatter.printHelp(150, "java -jar bidder.jar", header, options, separator, true);
+    }
+
+    private Bidder createBidder(String bidderType) {
+        return BidderBuilder.createBidderByType(bidderType);
     }
 }
