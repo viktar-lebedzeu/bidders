@@ -144,8 +144,4 @@ public class BiddersApplication implements CommandLineRunner {
         final String header = separator + "\n" + "Bidders application options\n" + separator + "\n";
         formatter.printHelp(150, "java -jar bidder.jar", header, options, separator, true);
     }
-
-    private Bidder createBidder(String bidderType) {
-        return BidderBuilder.createBidderByType(bidderType);
-    }
 }

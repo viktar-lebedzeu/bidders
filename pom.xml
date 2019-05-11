@@ -26,7 +26,6 @@
 
 		<!-- 3rd party libraries versions -->
 		<lombok.version>1.18.6</lombok.version>
-		<jacoco.maven.version>0.8.3</jacoco.maven.version>
 		<commons.lang3.version>3.9</commons.lang3.version>
 		<commons.cli.version>1.4</commons.cli.version>
 
@@ -34,7 +33,87 @@
 		<maven.surefire.version>3.0.0-M3</maven.surefire.version>
 		<maven.site.version>3.7.1</maven.site.version>
 		<maven.project-info.version>3.0.0</maven.project-info.version>
+		<maven.cobertura.version>2.7</maven.cobertura.version>
+		<maven.jacoco.version>0.8.3</maven.jacoco.version>
 	</properties>
+
+	<profiles>
+		<profile>
+			<id>coverage</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.codehaus.mojo</groupId>
+							<artifactId>cobertura-maven-plugin</artifactId>
+							<version>${maven.plugin.cobertura.version}</version>
+							<configuration>
+								<formats>
+									<format>xml</format>
+									<format>html</format>
+								</formats>
+								<instrumentation>
+									<excludes>uk/org/**</excludes>
+								</instrumentation>
+							</configuration>
+							<executions>
+								<execution>
+									<phase>package</phase>
+									<goals>
+										<goal>cobertura</goal>
+									</goals>
+								</execution>
+							</executions>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cobertura-maven-plugin</artifactId>
+					</plugin>
+
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>default-prepare-agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>default-prepare-agent-integration</id>
+								<goals>
+									<goal>prepare-agent-integration</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>default-report</id>
+								<goals>
+									<goal>report</goal>
+								</goals>
+								<configuration>
+									<excludes>uk/org/**</excludes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>default-report-integration</id>
+								<goals>
+									<goal>report-integration</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<dependency>
@@ -84,7 +163,7 @@
 		<dependency>
 			<groupId>org.jacoco</groupId>
 			<artifactId>jacoco-maven-plugin</artifactId>
-			<version>${jacoco.maven.version}</version>
+			<version>${maven.jacoco.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -110,11 +189,6 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${maven.surefire.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>${maven.project-info.version}</version>
 			</plugin>
@@ -137,6 +211,32 @@
 				<version>${jacoco.maven.version}</version>
 			</plugin>
 -->
+
+			<!-- code coverage plugins -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${maven.jacoco.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>${maven.cobertura.version}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.surefire.version}</version>
+				<configuration>
+					<!-- Tests with group "manual" will be excluded since they are only for running manually -->
+					<excludedGroups>manual</excludedGroups>
+
+					<!--forkMode>once</forkMode>
+                    <argLine>-Djava.library.path=${project.build.directory}</argLine-->
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
