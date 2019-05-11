@@ -32,4 +32,10 @@ public class BiddersApplicationTest {
         application.run("-b1", BidderStrategyEnum.WEIGHTED.getType(), "-b2", BidderStrategyEnum.WEIGHTED.getType(),
                 "-qty", "20", "-c", "250");
     }
+
+    @Test
+    public void testWeightedVsWeightedCorrection() throws Exception {
+        application.run("-b1", BidderStrategyEnum.WEIGHTED.getType(), "-b2", BidderStrategyEnum.WEIGHTED_CORRECTION.getType(),
+                "-qty", "20", "-c", "100");
+    }
 }

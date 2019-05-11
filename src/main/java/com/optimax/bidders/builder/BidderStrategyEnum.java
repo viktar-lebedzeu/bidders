@@ -12,12 +12,14 @@ import java.util.stream.Collectors;
 public enum BidderStrategyEnum {
     /** "weighted" strategy */
     WEIGHTED("weighted"),
+    /** "weighted with correction" strategy */
+    WEIGHTED_CORRECTION("weighted-correction"),
     /** "equal" value strategy */
     EQUAL("equal"),
     /** Unknown value */
     UNKNOWN(StringUtils.EMPTY);
 
-    /** Stategy type */
+    /** Strategy type */
     private String type;
 
     /**

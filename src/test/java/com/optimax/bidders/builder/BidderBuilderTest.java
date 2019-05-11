@@ -3,6 +3,7 @@ package com.optimax.bidders.builder;
 import com.optimax.bidders.auction.Bidder;
 import com.optimax.bidders.auction.impl.EqualVerboseBidder;
 import com.optimax.bidders.auction.impl.WeightedBidder;
+import com.optimax.bidders.auction.impl.WeightedCorrectionBidder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -23,6 +24,10 @@ public class BidderBuilderTest {
         Bidder bidder = BidderBuilder.createBidderByType("wEiGhTeD");
         Assert.assertNotNull(bidder);
         Assert.assertTrue(bidder instanceof WeightedBidder);
+
+        bidder = BidderBuilder.createBidderByType("wEiGhTeD-cORRecTIOn");
+        Assert.assertNotNull(bidder);
+        Assert.assertTrue(bidder instanceof WeightedCorrectionBidder);
 
         bidder = BidderBuilder.createBidderByType("EqUaL");
         Assert.assertNotNull(bidder);

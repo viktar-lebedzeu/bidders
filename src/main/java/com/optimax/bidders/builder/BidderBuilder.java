@@ -3,6 +3,7 @@ package com.optimax.bidders.builder;
 import com.optimax.bidders.auction.Bidder;
 import com.optimax.bidders.auction.impl.EqualVerboseBidder;
 import com.optimax.bidders.auction.impl.WeightedBidder;
+import com.optimax.bidders.auction.impl.WeightedCorrectionBidder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -21,6 +22,9 @@ public class BidderBuilder {
         switch (strategy) {
             case WEIGHTED:
                 return new WeightedBidder();
+
+            case WEIGHTED_CORRECTION:
+                return new WeightedCorrectionBidder();
 
             case EQUAL:
                 return new EqualVerboseBidder();
