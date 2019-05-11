@@ -5,7 +5,9 @@ import com.optimax.bidders.auction.impl.EqualVerboseBidder;
 import com.optimax.bidders.auction.impl.WeightedBidder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Test suite to test features of BidderBuilder class
@@ -13,6 +15,8 @@ import org.junit.Test;
  */
 @Slf4j
 public class BidderBuilderTest {
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testCreateBidder() {
@@ -23,5 +27,12 @@ public class BidderBuilderTest {
         bidder = BidderBuilder.createBidderByType("EqUaL");
         Assert.assertNotNull(bidder);
         Assert.assertTrue(bidder instanceof EqualVerboseBidder);
+    }
+
+    @Test
+    public void testIncorrectBidderType() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Unknown bidder strategy type \"xXx\"");
+        BidderBuilder.createBidderByType("xXx");
     }
 }

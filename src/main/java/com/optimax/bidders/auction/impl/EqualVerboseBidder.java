@@ -29,6 +29,9 @@ public class EqualVerboseBidder extends BaseVerboseBidder {
         if (value > cash) {
             value = cash;
         }
+        if (quantity < goalQuantity) {
+            value = 0;
+        }
         if (verbose) {
             log.info("Placed bid: {} / {} ({}) = {}", value, cash, initialCash, cash - value);
         }

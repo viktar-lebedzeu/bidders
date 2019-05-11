@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles({ "unittests" })
-@SpringBootTest(classes = { BiddersApplication.class } )
+@SpringBootTest
 @Slf4j
 public class BiddersApplicationTest {
     @Autowired
@@ -23,9 +22,14 @@ public class BiddersApplicationTest {
     private BiddersApplicationTestConfig config;
 
     @Test
-    public void testApplication() throws Exception {
-        log.info("Running testApplication()...");
+    public void testWeightedVsEqual() throws Exception {
         application.run("-b1", BidderStrategyEnum.WEIGHTED.getType(), "-b2", BidderStrategyEnum.EQUAL.getType(),
-                "-qty", "21", "-c", "100", "-v");
+                "-qty", "21", "-c", "100", "-v", "-h");
+    }
+
+    @Test
+    public void testWeightedVsWeighted() throws Exception {
+        application.run("-b1", BidderStrategyEnum.WEIGHTED.getType(), "-b2", BidderStrategyEnum.WEIGHTED.getType(),
+                "-qty", "20", "-c", "250");
     }
 }

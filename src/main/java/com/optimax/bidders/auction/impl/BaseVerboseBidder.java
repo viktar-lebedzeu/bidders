@@ -1,6 +1,8 @@
 package com.optimax.bidders.auction.impl;
 
 import com.optimax.bidders.auction.VerboseBidder;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,6 +24,10 @@ public abstract class BaseVerboseBidder implements VerboseBidder {
     protected boolean verbose;
     /** Goal quantity points */
     protected int goalQuantity = 0;
+
+    @Setter
+    @Getter
+    protected String bidderId;
 
     @Override
     public void setVerbose(boolean verbose) {

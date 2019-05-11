@@ -26,7 +26,7 @@ public class BidderBuilder {
                 return new EqualVerboseBidder();
 
             default:
-                throw new IllegalArgumentException("Unknown bidder strategy type \"" + type + '\"');
+                throw new IllegalArgumentException("Unknown bidder strategy type \"" + type + "\"");
         }
     }
 

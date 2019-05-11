@@ -1,9 +1,9 @@
 package com.optimax.bidders;
 
 import com.optimax.bidders.auction.AuctionModerator;
-import com.optimax.bidders.auction.Bidder;
-import com.optimax.bidders.builder.BidderBuilder;
+import com.optimax.bidders.auction.AuctionResultPrinter;
 import com.optimax.bidders.builder.BidderStrategyEnum;
+import com.optimax.bidders.dto.AuctionResultInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -13,40 +13,52 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.env.Environment;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 @Slf4j
 @SpringBootApplication(scanBasePackages = "com.optimax.bidders")
 public class BiddersApplication implements CommandLineRunner {
-
-    // Command line parameters
-    private static final String PARAM_BIDDER1 =     "-bidder1";
-    private static final String PARAM_BIDDER2 =     "-bidder2";
-    private static final String PARAM_QUANTITY =    "-qty";
-    private static final String PARAM_CASH =        "-cash";
-
-    /** Required CMD parameters */
-    private static final String[] REQUIRED_PARAMS = new String[] {
-            PARAM_BIDDER1, PARAM_BIDDER2, PARAM_CASH, PARAM_QUANTITY
-    };
-
     /** CLI options */
     private Options options = new Options();
 
     /** Auction moderator */
-    private AuctionModerator moderator;
+    private final AuctionModerator moderator;
+    /** Auction result printer */
+    private final AuctionResultPrinter resultPrinter;
+
     /** Verbose mode flag */
     private boolean verbose = false;
+    /** Spring's environment */
+    private final Environment env;
 
     public static void main(String[] args) {
         SpringApplication.run(BiddersApplication.class, args);
     }
 
+    @Autowired
+    public BiddersApplication(AuctionModerator moderator, AuctionResultPrinter resultPrinter, Environment env) {
+        this.moderator = moderator;
+        this.resultPrinter = resultPrinter;
+        this.env = env;
+    }
+
     @Override
     public void run(String... args) throws Exception {
         final String bidderPossibleValues = BidderStrategyEnum.possibleValues();
+
+        HashSet<String> profilesSet = new HashSet<>(Arrays.asList(env.getActiveProfiles()));
+        if ((args == null || args.length == 0) && profilesSet.contains("unittests")) {
+            // Skipping running application without arguments in unit tests
+            return;
+        }
+
         options.addOption(
                 Option.builder("b1")
                         .longOpt("bidder1")
@@ -99,18 +111,23 @@ public class BiddersApplication implements CommandLineRunner {
                         .required(false)
                         .build()
         );
-        parseParameters(args);
-        runAuction();
-    }
-
-    private void runAuction() {
-        if (moderator != null) {
-            while (moderator.nextTurn());
-            moderator.printResult();
+        if (parseParameters(args)) {
+            runAuction();
         }
     }
 
-    private void parseParameters(String... args) {
+    private void runAuction() {
+        while (moderator.nextTurn());
+        final AuctionResultInfo auctionResult = moderator.calculateAuctionResult();
+        resultPrinter.print(auctionResult);
+    }
+
+    /**
+     * Parses application arguments
+     * @param args Application arguments
+     * @return True if all required parameters are set, false otherwise
+     */
+    private boolean parseParameters(String... args) {
         CommandLineParser parser = new DefaultParser();
         try {
             final CommandLine line = parser.parse(options, args);
@@ -121,13 +138,15 @@ public class BiddersApplication implements CommandLineRunner {
             final String bidderType1 = line.getOptionValue("b1");
             final String bidderType2 = line.getOptionValue("b2");
 
-            log.info("bidder 1 : {}", bidderType1);
-            log.info("bidder 2 : {}", line.getOptionValue("b2"));
-            log.info("qty      : {}", line.getOptionValue("qty"));
-            log.info("cash     : {}", line.getOptionValue("c"));
-            log.info("verbose  : {}", line.hasOption("v"));
+            if (verbose) {
+                log.info("bidder 1 : {}", bidderType1);
+                log.info("bidder 2 : {}", bidderType2);
+                log.info("qty      : {}", line.getOptionValue("qty"));
+                log.info("cash     : {}", line.getOptionValue("c"));
+                log.info("verbose  : {}", line.hasOption("v"));
+            }
 
-            moderator = AuctionModerator.create(bidderType1, bidderType2,
+            moderator.create(bidderType1, bidderType2,
                     Integer.valueOf(line.getOptionValue("qty")), Integer.valueOf(line.getOptionValue("c")));
             moderator.setVerbose(line.hasOption("v"));
         }
@@ -135,7 +154,9 @@ public class BiddersApplication implements CommandLineRunner {
             // log.error("Cannot parse command line parameters. ", e);
             log.error(e.getMessage());
             printHelp();
+            return false;
         }
+        return true;
     }
 
     private void printHelp() {

@@ -1,8 +1,17 @@
+spring:
+  output:
+    ansi:
+      enabled: DETECT
+
 logging:
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+#    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   level:
-    - org.springframework.test=INFO
-    - org.springframework=INFO
-# logging.level.com.horeca=DEBUG
+    root: INFO
+    org.springframework: WARN
+    org.springframework.test: WARN
+    com.optimax: INFO
 
 application-test:
   name: "application test"
