@@ -52,6 +52,10 @@ public enum BidderStrategyEnum {
         return UNKNOWN;
     }
 
+    /**
+     * Returns string of all possible bidder strategy types
+     * @return String of possible values
+     */
     public static String possibleValues() {
         return Arrays.stream(BidderStrategyEnum.values())
                         .filter(v -> v != UNKNOWN)

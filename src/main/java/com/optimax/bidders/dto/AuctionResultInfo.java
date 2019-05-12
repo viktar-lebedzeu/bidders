@@ -11,14 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Bean of auction result info
  * @author Viktar Lebedzeu
  */
 @Data
 @NoArgsConstructor
 public class AuctionResultInfo {
+    /** Default header of the first bid value */
     public static final String BID_HEADER_1 = "Bid 1";
+    /** Default header of the second bid value */
     public static final String BID_HEADER_2 = "Bid 2";
+    /** Default header of the first win points */
     public static final String WIN_POINTS_HEADER_1 = "Win 1";
+    /** Default header of the second win points */
     public static final String WIN_POINTS_HEADER_2 = "Win 2";
 
     /** List of bids */
@@ -35,19 +40,33 @@ public class AuctionResultInfo {
     /** Initial value of bidder's cash */
     private int initialCash;
 
+    /** Max length of auction steps */
     private int stepLength = 0;
+    /** Max length of "Bid 1" values */
     private int bid1FieldLength = 0;
+    /** Max length of "Bid 2" values */
     private int bid2FieldLength = 0;
+    /** Max length of "Win 1" values */
     private int winPoints1FieldLength = 0;
+    /** Max length of "Win 2" values */
     private int winPoints2FieldLength = 0;
 
-
+    /** First bidder */
     private Bidder bidder1;
+    /** Second bidder */
     private Bidder bidder2;
+    /** Type of the first bidder */
     private BidderStrategyEnum bidder1Type = BidderStrategyEnum.UNKNOWN;
+    /** Type of the second bidder */
     private BidderStrategyEnum bidder2Type = BidderStrategyEnum.UNKNOWN;
 
-
+    /**
+     * Inits and calculates all requires fields
+     * @param initialQuantity Initial value of product (Quantity units, QU)
+     * @param initialCash Initial value of cash (Monetary units, MU)
+     * @param bidders List of bidders
+     * @param bidInfos List of info records of all auction steps, including bids and win points
+     */
     public void init(int initialQuantity, int initialCash, List<Bidder> bidders, List<BidInfo> bidInfos) {
         this.initialQuantity = initialQuantity;
         this.initialCash = initialCash;

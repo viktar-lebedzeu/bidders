@@ -4,7 +4,7 @@ import com.optimax.bidders.builder.BidderStrategyEnum;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Bidder that uses Weighted strategy. I means tht the main goal is achieving > 50% of QU
+ * Bidder that uses "Weighted" strategy. It means that the main goal is achieving more than 50% of QU
  * @author Viktar Lebedzeu
  */
 @Slf4j
@@ -41,7 +41,6 @@ public class WeightedBidder extends BaseVerboseBidder {
             }
             if (value > currentCash) {
                 value = cash;
-                // log.warn("incorrect value : {} / {}", value, (int) currentCash);
             }
             // value = (int) Math.ceil((double) cash / (double) (goalQuantity - quantityPoints));
         }

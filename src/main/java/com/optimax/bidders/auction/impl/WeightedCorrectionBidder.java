@@ -4,6 +4,7 @@ import com.optimax.bidders.builder.BidderStrategyEnum;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Bidder that uses improved "Weighted" strategy.
  * @author Viktar Lebedzeu
  */
 @Slf4j
@@ -61,9 +62,9 @@ public class WeightedCorrectionBidder extends WeightedBidder {
 
     @Override
     public void bids(int own, int other) {
-        int points = quantityPoints;
+        // int points = quantityPoints;
         super.bids(own, other);
-        points = quantityPoints - points;
+        // points = quantityPoints - points;
         // log.info("Points : {}", points);
 
         oppositeCash -= other;

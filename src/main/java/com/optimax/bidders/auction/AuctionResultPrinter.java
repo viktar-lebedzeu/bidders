@@ -1,14 +1,11 @@
 package com.optimax.bidders.auction;
 
 import com.optimax.bidders.auction.impl.BaseVerboseBidder;
-import com.optimax.bidders.builder.BidderStrategyEnum;
 import com.optimax.bidders.dto.AuctionResultInfo;
 import com.optimax.bidders.dto.BidInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 import static com.optimax.bidders.dto.AuctionResultInfo.BID_HEADER_1;
 import static com.optimax.bidders.dto.AuctionResultInfo.BID_HEADER_2;
@@ -22,6 +19,7 @@ import static com.optimax.bidders.dto.AuctionResultInfo.WIN_POINTS_HEADER_2;
 @Slf4j
 @Service
 public class AuctionResultPrinter {
+    /** Default width of line of printed text */
     private static final int LINE_WIDTH = 100;
 
     /**
@@ -83,8 +81,6 @@ public class AuctionResultPrinter {
                             : winner.toString());
         }
 
-//        log.info(StringUtils.repeat(".", LINE_WIDTH));
         log.info(StringUtils.repeat("=", LINE_WIDTH));
-
     }
 }

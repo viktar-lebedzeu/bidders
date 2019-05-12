@@ -12,6 +12,3 @@ logging:
     org.springframework: WARN
     org.springframework.test: WARN
     com.optimax: INFO
-
-application-test:
-  name: "application test"

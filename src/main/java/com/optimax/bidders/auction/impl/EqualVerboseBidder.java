@@ -4,6 +4,7 @@ import com.optimax.bidders.builder.BidderStrategyEnum;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Bidder implementation that uses "equal" strategy
  * @author Viktar Lebedzeu
  */
 @Slf4j

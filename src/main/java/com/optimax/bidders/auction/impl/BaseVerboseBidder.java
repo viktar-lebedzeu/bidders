@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Base abstract implementation of verbose-able bidder
  * @author Viktar Lebedzeu
  */
 @Slf4j
@@ -29,6 +30,7 @@ public abstract class BaseVerboseBidder implements VerboseBidder {
     /** Goal quantity points */
     protected int goalQuantity = 0;
 
+    /** Bidder Id */
     @Setter
     @Getter
     protected String bidderId;

@@ -8,7 +8,7 @@ import com.optimax.bidders.builder.BidderStrategyEnum;
  */
 public interface VerboseBidder extends Bidder {
     /**
-     * Set verbose flag.
+     * Sets verbose flag.
      * @param verbose Initial value to set. True means that bidder should print verbose messages, false otherwise.
      */
     void setVerbose(boolean verbose);

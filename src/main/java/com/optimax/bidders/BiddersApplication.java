@@ -4,6 +4,7 @@ import com.optimax.bidders.auction.AuctionModerator;
 import com.optimax.bidders.auction.AuctionResultPrinter;
 import com.optimax.bidders.builder.BidderStrategyEnum;
 import com.optimax.bidders.dto.AuctionResultInfo;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -22,6 +23,10 @@ import org.springframework.core.env.Environment;
 import java.util.Arrays;
 import java.util.HashSet;
 
+/**
+ * Spring application for running auction between two bidders
+ * @author Viktar Lebedzeu
+ */
 @Slf4j
 @SpringBootApplication(scanBasePackages = "com.optimax.bidders")
 public class BiddersApplication implements CommandLineRunner {
@@ -38,6 +43,14 @@ public class BiddersApplication implements CommandLineRunner {
     /** Spring's environment */
     private final Environment env;
 
+    /** Auction result bean */
+    @Getter
+    private AuctionResultInfo auctionResult;
+
+    /**
+     * Main application entry point
+     * @param args String application arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(BiddersApplication.class, args);
     }
@@ -50,7 +63,7 @@ public class BiddersApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         final String bidderPossibleValues = BidderStrategyEnum.possibleValues();
 
         HashSet<String> profilesSet = new HashSet<>(Arrays.asList(env.getActiveProfiles()));
@@ -116,9 +129,12 @@ public class BiddersApplication implements CommandLineRunner {
         }
     }
 
+    /**
+     * Runs an auction
+     */
     private void runAuction() {
         while (moderator.nextTurn());
-        final AuctionResultInfo auctionResult = moderator.calculateAuctionResult();
+        auctionResult = moderator.calculateAuctionResult();
         resultPrinter.print(auctionResult);
     }
 
@@ -159,6 +175,9 @@ public class BiddersApplication implements CommandLineRunner {
         return true;
     }
 
+    /**
+     * Prints CLI application help, including possible options
+     */
     private void printHelp() {
         HelpFormatter formatter = new HelpFormatter();
         final String separator = StringUtils.repeat("=", 100);

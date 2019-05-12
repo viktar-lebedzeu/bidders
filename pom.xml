@@ -32,6 +32,7 @@
 		<!-- Maven plugin versions -->
 		<maven.surefire.version>3.0.0-M3</maven.surefire.version>
 		<maven.site.version>3.7.1</maven.site.version>
+		<maven.javadoc.version>3.1.0</maven.javadoc.version>
 		<maven.project-info.version>3.0.0</maven.project-info.version>
 		<maven.jacoco.version>0.8.3</maven.jacoco.version>
 	</properties>
@@ -177,7 +178,23 @@
 				<version>${maven.site.version}</version>
 			</plugin>
 
-			<!-- code coverage plugins -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven.javadoc.version}</version>
+				<executions>
+					<execution>
+						<id>javadocs</id>
+						<phase>install</phase>
+						<goals>
+							<goal>javadoc</goal>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- code coverage plugin -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -206,6 +223,10 @@
 						</reports>
 					</reportSet>
 				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</reporting>

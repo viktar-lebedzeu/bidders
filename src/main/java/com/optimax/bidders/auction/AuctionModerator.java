@@ -2,11 +2,10 @@ package com.optimax.bidders.auction;
 
 import com.optimax.bidders.auction.impl.BaseVerboseBidder;
 import com.optimax.bidders.builder.BidderBuilder;
-import com.optimax.bidders.builder.BidderStrategyEnum;
 import com.optimax.bidders.dto.AuctionResultInfo;
 import com.optimax.bidders.dto.BidInfo;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Auctionist or auction moderator class.
+ * Auction moderator class. Collects all bids of auction parties and dic
  * @author Viktar Lebedzeu
  */
 @Slf4j
@@ -41,11 +40,14 @@ public class AuctionModerator {
     /** Verbose flag */
     private boolean verbose;
 
+    /** Auction result bean. Could be calculated when auction is finished */
+    @Getter
     private AuctionResultInfo auctionResultInfo;
 
     protected AuctionModerator() {
     }
 
+    /** Inits all required objects befo running an auction, e.g. bidders */
     private void init() {
         bidders.parallelStream().forEach(b -> b.init(initialQuantity, initialCash));
     }
