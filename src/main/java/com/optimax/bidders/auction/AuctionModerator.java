@@ -88,6 +88,10 @@ public class AuctionModerator {
         return (quantity > 0);
     }
 
+    /**
+     * Calculates auction result
+     * @return Auction result bean
+     */
     public AuctionResultInfo calculateAuctionResult() {
         AuctionResultInfo info = new AuctionResultInfo();
         info.init(initialQuantity, initialCash, bidders, bidInfos);

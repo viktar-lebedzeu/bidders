@@ -14,10 +14,14 @@ public abstract class BaseVerboseBidder implements VerboseBidder {
     protected int initialQuantity = 0;
     /** Initial value of cash (MU) */
     protected int initialCash = 0;
+    /** Initial turns */
+    protected int initialTurns = 0;
     /** The rest of auctioned units (QU) */
     protected int quantity = 0;
     /** The rest of cash */
     protected int cash = 0;
+    /** Left turns */
+    protected int turns = 0;
     /** Qty points that won bidder */
     protected int quantityPoints = 0;
     /** Verbose logging flag */
@@ -44,10 +48,8 @@ public abstract class BaseVerboseBidder implements VerboseBidder {
         this.cash = cash;
         this.quantityPoints = 0;
 
-        goalQuantity = quantity / 2;
-        if (goalQuantity % 2 == 0) {
-            goalQuantity++;
-        }
+        goalQuantity = (quantity / 2) + (quantity % 2 == 0 ? 1 : 0);
+        turns = initialTurns = (quantity / 2) + (quantity % 2 != 0 ? 1 : 0);
     }
 
     @Override
@@ -67,8 +69,9 @@ public abstract class BaseVerboseBidder implements VerboseBidder {
         }
         quantityPoints += points;
         quantity -= qPoints;
+        turns--;
         if (verbose) {
-            log.info("QU : {}", quantityPoints);
+            log.info("QU : {}; turns : {}", quantityPoints, turns);
         }
     }
 }

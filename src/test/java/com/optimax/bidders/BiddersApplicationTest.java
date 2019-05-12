@@ -23,19 +23,41 @@ public class BiddersApplicationTest {
 
     @Test
     public void testWeightedVsEqual() throws Exception {
-        application.run("-b1", BidderStrategyEnum.WEIGHTED.getType(), "-b2", BidderStrategyEnum.EQUAL.getType(),
-                "-qty", "21", "-c", "100", "-v", "-h");
+        application.run(
+                "-b1", BidderStrategyEnum.WEIGHTED.getType(),
+                "-b2", BidderStrategyEnum.EQUAL.getType(),
+                "-qty", "20", "-c", "500" /*, "-v", "-h" */);
     }
 
     @Test
     public void testWeightedVsWeighted() throws Exception {
-        application.run("-b1", BidderStrategyEnum.WEIGHTED.getType(), "-b2", BidderStrategyEnum.WEIGHTED.getType(),
-                "-qty", "20", "-c", "250");
+        application.run(
+                "-b1", BidderStrategyEnum.WEIGHTED.getType(),
+                "-b2", BidderStrategyEnum.WEIGHTED.getType(),
+                "-qty", "20", "-c", "500" /*, "-v" */);
     }
 
     @Test
     public void testWeightedVsWeightedCorrection() throws Exception {
-        application.run("-b1", BidderStrategyEnum.WEIGHTED.getType(), "-b2", BidderStrategyEnum.WEIGHTED_CORRECTION.getType(),
-                "-qty", "20", "-c", "100");
+        application.run(
+                "-b1", BidderStrategyEnum.WEIGHTED.getType(),
+                "-b2", BidderStrategyEnum.WEIGHTED_CORRECTION.getType(),
+                "-qty", "20", "-c", "500" /*, "-v" */);
+    }
+
+    @Test
+    public void testEqualVsWeightedCorrection() throws Exception {
+        application.run(
+                "-b1", BidderStrategyEnum.EQUAL.getType(),
+                "-b2", BidderStrategyEnum.WEIGHTED_CORRECTION.getType(),
+                "-qty", "20", "-c", "500" /*, "-v" */);
+    }
+
+    @Test
+    public void testWeightedCorrectionVsWeightedCorrection() throws Exception {
+        application.run(
+                "-b1", BidderStrategyEnum.WEIGHTED_CORRECTION.getType(),
+                "-b2", BidderStrategyEnum.WEIGHTED_CORRECTION.getType(),
+                "-qty", "20", "-c", "500" /*, "-v" */);
     }
 }

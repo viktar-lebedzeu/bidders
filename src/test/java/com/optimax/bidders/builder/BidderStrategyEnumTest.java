@@ -26,6 +26,6 @@ public class BidderStrategyEnumTest {
     @Test
     public void testPossibleValues() {
         final String possibleValues = BidderStrategyEnum.possibleValues();
-        Assert.assertEquals("[equal, weighted]", possibleValues);
+        Assert.assertEquals("[equal, weighted, weighted-correction]", possibleValues);
     }
 }

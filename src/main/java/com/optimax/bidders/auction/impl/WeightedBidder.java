@@ -31,10 +31,22 @@ public class WeightedBidder extends BaseVerboseBidder {
         }
         int value = 0;
         if (goalQuantity > quantityPoints) {
-            value = (int) Math.ceil((double) cash / (double) (goalQuantity - quantityPoints));
+            double goalQU = (double) (goalQuantity - quantityPoints);
+            double currentCash = (double) cash;
+            double val3 = currentCash / goalQU * (double) initialTurns / (double) turns;
+            int eqValue = (int) Math.ceil((double) cash / (double) turns);
+            value = (int) Math.ceil(val3);
+            if (value < eqValue) {
+                value = eqValue;
+            }
+            if (value > currentCash) {
+                value = cash;
+                // log.warn("incorrect value : {} / {}", value, (int) currentCash);
+            }
+            // value = (int) Math.ceil((double) cash / (double) (goalQuantity - quantityPoints));
         }
         if (verbose) {
-            log.info("Placed bid: {} / {} ({}) = {}", value, cash, initialCash, cash - value);
+            log.info("[{}] Placed bid: {} / {} ({}) = {}", getBidderId(), value, cash, initialCash, cash - value);
         }
         cash -= value;
         return value;

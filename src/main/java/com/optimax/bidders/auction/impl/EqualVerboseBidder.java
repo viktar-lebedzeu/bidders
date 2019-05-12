@@ -25,15 +25,15 @@ public class EqualVerboseBidder extends BaseVerboseBidder {
 
     @Override
     public int placeBid() {
-        int value = (int) Math.ceil((double) cash / (double) quantity);
-        if (value > cash) {
-            value = cash;
-        }
-        if (quantity < goalQuantity) {
-            value = 0;
+        int value = 0;
+        if (goalQuantity > quantityPoints) {
+            value = (int) Math.ceil((double) cash / (double) turns);
+            if (value > cash) {
+                value = cash;
+            }
         }
         if (verbose) {
-            log.info("Placed bid: {} / {} ({}) = {}", value, cash, initialCash, cash - value);
+            log.info("[{}] Placed bid: {} / {} ({}) = {}", getBidderId(), value, cash, initialCash, cash - value);
         }
         cash -= value;
         return value;

@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 public class WeightedCorrectionBidder extends WeightedBidder {
     /** Count of ties (draws) */
     private int tieCount = 0;
+    /** Count of wins */
+    private int winCount = 0;
     /** Competitor's cash */
     private int oppositeCash = 0;
     /** Competitor's quantity */
@@ -36,6 +38,23 @@ public class WeightedCorrectionBidder extends WeightedBidder {
                 bid += cash;
                 cash = 0;
             }
+            else if (initialTurns != turns) {
+                int completedTurns = initialTurns - turns;
+                double tiePercentage = (double) tieCount / (double) completedTurns;
+                if (tiePercentage > 0.5d) {
+                    double step = (double) tieCount / (double) initialTurns;
+                    int bidAdd = (int) Math.ceil((double) bid * step);
+                    if (bidAdd > cash) {
+                        bidAdd = cash;
+                    }
+                    bid += bidAdd;
+                    cash -= bidAdd;
+                }
+                if (verbose) {
+                    log.info("tiePercentage = {}", tiePercentage);
+                }
+
+            }
         }
         return bid;
     }
@@ -51,6 +70,9 @@ public class WeightedCorrectionBidder extends WeightedBidder {
         oppositeQuantity = initialQuantity - quantity;
         if (own == other) {
             tieCount++;
+        }
+        if (own > other) {
+            winCount++;
         }
     }
 }
