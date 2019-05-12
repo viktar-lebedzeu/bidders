@@ -33,9 +33,9 @@ public class WeightedBidder extends BaseVerboseBidder {
         if (goalQuantity > quantityPoints) {
             double goalQU = (double) (goalQuantity - quantityPoints);
             double currentCash = (double) cash;
-            double val3 = currentCash / goalQU * (double) initialTurns / (double) turns;
+            double val = currentCash / goalQU * (double) initialTurns / (double) turns;
             int eqValue = (int) Math.ceil((double) cash / (double) turns);
-            value = (int) Math.ceil(val3);
+            value = (int) Math.ceil(val);
             if (value < eqValue) {
                 value = eqValue;
             }
